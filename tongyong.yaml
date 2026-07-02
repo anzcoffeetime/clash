@@ -1,0 +1,620 @@
+# 通用 Clash 配置文件，兼容 iOS Stash/ClashMeta、OpenWrt Nikki/OpenClash、安卓 ClashMeta
+# 包含自动、手动、均衡-轮询、均衡-散列四种模式
+
+proxy-providers:
+  ssrdog:
+    url: ""
+    type: http
+    interval: 86400
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 300
+    proxy: Direct
+    filter: '^(?!.*(群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入|USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author))'
+  
+
+  
+proxies:
+  - {name: Direct, type: direct}
+
+port: 7890
+socks-port: 7891
+redir-port: 7892
+mixed-port: 7893
+tproxy-port: 7894
+allow-lan: true
+bind-address: "*"
+mode: rule
+log-level: warning
+ipv6: false
+unified-delay: true
+tcp-concurrent: true
+global-client-fingerprint: chrome
+profile:
+  store-selected: true
+  store-fake-ip: true
+
+sniffer:
+  enable: true
+  sniff:
+    HTTP:
+      ports: [80, 8080-8880]
+      override-destination: true
+    TLS:
+      ports: [443, 8443]
+    QUIC:
+      ports: [443, 8443]
+  force-domain:
+    - "+.v2ex.com"
+  skip-domain:
+    - "+.baidu.com"
+
+tun:
+  enable: true
+  stack: system
+  dns-hijack:
+    - "any:53"
+    - "tcp://any:53"
+  auto-route: true
+  auto-detect-interface: true
+
+
+dns:
+  enable: true
+  listen: 0.0.0.0:1053
+  ipv6: false
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter-mode: blacklist
+  fake-ip-filter:
+    - "+.market.xiaomi.com"
+    - "time.*.com"
+    - "+.msftncsi.com"
+    - "+.msftconnecttest.com"
+    - "+.lan"
+    - "+.local"
+    - "geosite:private"
+    - "geosite:cn"
+
+  default-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+    - 114.114.115.115
+    - 180.76.76.76
+    - 1.1.1.1
+    - 8.8.8.8
+
+  nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+    - 114.114.114.114
+    - 180.76.76.76
+    - 1.1.1.1
+    - 8.8.8.8
+
+  proxy-server-nameserver:
+    - https://dns.cloudflare.com/dns-query
+    - https://dns.google/dns-query
+    - https://dns.quad9.net/dns-query
+    - https://dns.adguard-dns.com/dns-query
+    - https://dns.nextdns.io/dns-query
+    - https://dns.opendns.com/dns-query
+
+  nameserver-policy:
+    "geosite:cn,private":
+      - 223.5.5.5
+      - 119.29.29.29
+      - 114.114.115.115
+      - 180.76.76.76
+      - 182.254.116.116
+      - 1.2.4.8
+
+    "geosite:geolocation-!cn":
+      - "https://dns.cloudflare.com/dns-query"
+      - "https://dns.google/dns-query"
+      - "https://dns.quad9.net/dns-query"
+      - "https://dns.adguard-dns.com/dns-query"
+      - "https://dns.nextdns.io/dns-query"
+      - "https://dns.opendns.com/dns-query"
+
+      
+proxy-groups:
+  # 🚀 服务策略组
+  - name: 🚀 默认代理
+    type: select
+    proxies:
+      - 🇭🇰 香港策略
+      - 🇹🇼 台湾策略
+      - 🇸🇬 新加坡策略
+      - 🇯🇵 日本策略
+      - 🇰🇷 韩国策略
+      - 🇺🇸 美国策略
+      - 🇪🇺 欧洲策略
+      - ♻️ 其他策略
+      - Direct
+  - name: 🌍 Duckduckgo
+    type: select
+    proxies:
+      - 🚀 默认代理
+      - 🇭🇰 香港策略
+      - 🇹🇼 台湾策略
+      - 🇸🇬 新加坡策略
+      - 🇯🇵 日本策略
+      - 🇰🇷 韩国策略
+      - 🇺🇸 美国策略
+      - 🇪🇺 欧洲策略
+      - ♻️ 其他策略
+      - Direct
+  - name: 👨🏿‍💻 GitHub
+    type: select
+    proxies:
+      - 🚀 默认代理
+      - 🇭🇰 香港策略
+      - 🇹🇼 台湾策略
+      - 🇸🇬 新加坡策略
+      - 🇯🇵 日本策略
+      - 🇰🇷 韩国策略
+      - 🇺🇸 美国策略
+      - 🇪🇺 欧洲策略
+      - ♻️ 其他策略
+      - Direct
+  - name: 📲 Telegram
+    type: select
+    proxies:
+      - 🚀 默认代理
+      - 🇭🇰 香港策略
+      - 🇹🇼 台湾策略
+      - 🇸🇬 新加坡策略
+      - 🇯🇵 日本策略
+      - 🇰🇷 韩国策略
+      - 🇺🇸 美国策略
+      - 🇪🇺 欧洲策略
+      - ♻️ 其他策略
+      - Direct
+  - name: 📲 Twitter
+    type: select
+    proxies:
+      - 🚀 默认代理
+      - 🇭🇰 香港策略
+      - 🇹🇼 台湾策略
+      - 🇸🇬 新加坡策略
+      - 🇯🇵 日本策略
+      - 🇰🇷 韩国策略
+      - 🇺🇸 美国策略
+      - 🇪🇺 欧洲策略
+      - ♻️ 其他策略
+      - Direct
+  - name: Ⓜ️ 微软服务
+    type: select
+    proxies:
+      - 🚀 默认代理
+      - 🇭🇰 香港策略
+      - 🇹🇼 台湾策略
+      - 🇸🇬 新加坡策略
+      - 🇯🇵 日本策略
+      - 🇰🇷 韩国策略
+      - 🇺🇸 美国策略
+      - 🇪🇺 欧洲策略
+      - ♻️ 其他策略
+      - Direct
+  - name: 🍀 Google
+    type: select
+    proxies:
+      - 🚀 默认代理
+      - 🇭🇰 香港策略
+      - 🇹🇼 台湾策略
+      - 🇸🇬 新加坡策略
+      - 🇯🇵 日本策略
+      - 🇰🇷 韩国策略
+      - 🇺🇸 美国策略
+      - 🇪🇺 欧洲策略
+      - ♻️ 其他策略
+      - Direct
+  - name: 📹 YouTube
+    type: select
+    proxies:
+      - 🚀 默认代理
+      - 🇭🇰 香港策略
+      - 🇹🇼 台湾策略
+      - 🇸🇬 新加坡策略
+      - 🇯🇵 日本策略
+      - 🇰🇷 韩国策略
+      - 🇺🇸 美国策略
+      - 🇪🇺 欧洲策略
+      - ♻️ 其他策略
+      - Direct
+  - name: 🤖 ChatGPT
+    type: select
+    proxies:
+      - 🚀 默认代理
+      - 🇭🇰 香港策略
+      - 🇹🇼 台湾策略
+      - 🇸🇬 新加坡策略
+      - 🇯🇵 日本策略
+      - 🇰🇷 韩国策略
+      - 🇺🇸 美国策略
+      - 🇪🇺 欧洲策略
+      - ♻️ 其他策略
+      - Direct
+  - name: 🐟 漏网之鱼
+    type: select
+    proxies:
+      - 🚀 默认代理
+      - 🇭🇰 香港策略
+      - 🇹🇼 台湾策略
+      - 🇸🇬 新加坡策略
+      - 🇯🇵 日本策略
+      - 🇰🇷 韩国策略
+      - 🇺🇸 美国策略
+      - 🇪🇺 欧洲策略
+      - ♻️ 其他策略
+      - Direct
+
+  # 🏁 地区策略组（选择器）
+  - name: 🇭🇰 香港策略
+    type: select
+    proxies:
+      - 🇭🇰 香港自动
+      - 🇭🇰 香港均衡-散列
+      - 🇭🇰 香港均衡-轮询
+      - 🇭🇰 香港手动
+    include-all: true
+    filter: '^(?=.*(?i)(港|🇭🇰|HK|Hong|HKG))(?!.*(排除1|排除2|5x)).*$'
+  - name: 🇹🇼 台湾策略
+    type: select
+    proxies:
+      - 🇹🇼 台湾自动
+      - 🇹🇼 台湾均衡-散列
+      - 🇹🇼 台湾均衡-轮询
+      - 🇹🇼 台湾手动
+    include-all: true
+    filter: '^(?=.*(?i)(台|🇹🇼|TW|tai|TPE|TSA|KHH))(?!.*(排除1|排除2|5x)).*$'
+  - name: 🇸🇬 新加坡策略
+    type: select
+    proxies:
+      - 🇸🇬 新加坡自动
+      - 🇸🇬 新加坡均衡-散列
+      - 🇸🇬 新加坡均衡-轮询
+      - 🇸🇬 新加坡手动
+    include-all: true
+    filter: '^(?=.*(?i)(坡|🇸🇬|SG|Sing|SIN|XSP))(?!.*(排除1|排除2|5x)).*$'
+  - name: 🇯🇵 日本策略
+    type: select
+    proxies:
+      - 🇯🇵 日本自动
+      - 🇯🇵 日本均衡-散列
+      - 🇯🇵 日本均衡-轮询
+      - 🇯🇵 日本手动
+    include-all: true
+    filter: '^(?=.*(?i)(日|🇯🇵|JP|Japan|NRT|HND|KIX|CTS|FUK))(?!.*(尼日利亚|排除2|5x)).*$'
+  - name: 🇰🇷 韩国策略
+    type: select
+    proxies:
+      - 🇰🇷 韩国自动
+      - 🇰🇷 韩国均衡-散列
+      - 🇰🇷 韩国均衡-轮询
+      - 🇰🇷 韩国手动
+    include-all: true
+    filter: '^(?=.*(?i)(韩|🇰🇷|KR|Korea|South))(?!.*(排除1|排除2|5x)).*$'
+  - name: 🇺🇸 美国策略
+    type: select
+    proxies:
+      - 🇺🇸 美国自动
+      - 🇺🇸 美国均衡-散列
+      - 🇺🇸 美国均衡-轮询
+      - 🇺🇸 美国手动
+    include-all: true
+    filter: '^(?=.*(?i)(美|🇺🇸|US|USA|JFK|SJC|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD))(?!.*(Plus|Australia|5x)).*$'
+  - name: 🇪🇺 欧洲策略
+    type: select
+    proxies:
+      - 🇪🇺 欧洲自动
+      - 🇪🇺 欧洲均衡-散列
+      - 🇪🇺 欧洲均衡-轮询
+      - 🇪🇺 欧洲手动
+    include-all: true
+    filter: '^(?=.*(?i)(奥|比|保|克罗地亚|塞|捷|丹|爱沙|芬|法|德|希|匈|爱尔|意|拉|立|卢|荷|波|葡|罗|斯洛伐|斯洛文|西|瑞|英|🇧🇪|🇨🇿|🇩🇰|🇫🇮|🇫🇷|🇩🇪|🇮🇪|🇮🇹|🇱🇹|🇱🇺|🇳🇱|🇵🇱|🇸🇪|🇬🇧|CDG|FRA|AMS|MAD|BCN|FCO|MUC|BRU))(?!.*(排除1|排除2|5x)).*$'
+  - name: ♻️ 其他策略
+    type: select
+    proxies:
+      - ♻️ 其他自动
+      - ♻️ 其他均衡-散列
+      - ♻️ 其他均衡-轮询
+      - ♻️ 其他手动
+    include-all: true
+    filter: '^(?!.*(DIRECT|直接连接|美|港|坡|台|新|日|韩|奥|比|保|克罗地亚|塞|捷|丹|爱沙|芬|法|德|希|匈|爱尔|意|拉|立|卢|荷|波|葡|罗|斯洛伐|斯洛文|西|瑞|英|🇭🇰|🇹🇼|🇸🇬|🇯🇵|🇰🇷|🇺🇸|🇬🇧|🇦🇹|🇧🇪|🇨🇿|🇩🇰|🇫🇮|🇫🇷|🇩🇪|🇮🇪|🇮🇹|🇱🇹|🇱🇺|🇳🇱|🇵🇱|🇸🇪|HK|TW|SG|JP|KR|US|GB|CDG|FRA|AMS|MAD|BCN|FCO|MUC|BRU|HKG|TPE|TSA|KHH|SIN|XSP|NRT|HND|KIX|CTS|FUK|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD|LHR|LGW)).*$'
+
+  # ⚡ 自动测速组
+  - name: 🇭🇰 香港自动
+    type: url-test
+    interval: 300
+    tolerance: 50
+    url: https://www.google.com/generate_204
+    include-all: true
+    filter: '^(?=.*(?i)(港|🇭🇰|HK|Hong|HKG))(?!.*(排除1|排除2|5x)).*$'
+  - name: 🇹🇼 台湾自动
+    type: url-test
+    interval: 300
+    tolerance: 50
+    url: https://www.google.com/generate_204
+    include-all: true
+    filter: '^(?=.*(?i)(台|🇹🇼|TW|tai|TPE|TSA|KHH))(?!.*(排除1|排除2|5x)).*$'
+  - name: 🇸🇬 新加坡自动
+    type: url-test
+    interval: 300
+    tolerance: 50
+    url: https://www.google.com/generate_204
+    include-all: true
+    filter: '^(?=.*(?i)(坡|🇸🇬|SG|Sing|SIN|XSP))(?!.*(排除1|排除2|5x)).*$'
+  - name: 🇯🇵 日本自动
+    type: url-test
+    interval: 300
+    tolerance: 50
+    url: https://www.google.com/generate_204
+    include-all: true
+    filter: '^(?=.*(?i)(日|🇯🇵|JP|Japan|NRT|HND|KIX|CTS|FUK))(?!.*(尼日利亚|排除2|5x)).*$'
+  - name: 🇰🇷 韩国自动
+    type: url-test
+    interval: 300
+    tolerance: 50
+    url: https://www.google.com/generate_204
+    include-all: true
+    filter: '^(?=.*(?i)(韩|🇰🇷|KR|Korea|South))(?!.*(排除1|排除2|5x)).*$'
+  - name: 🇺🇸 美国自动
+    type: url-test
+    interval: 300
+    tolerance: 50
+    url: https://www.google.com/generate_204
+    include-all: true
+    filter: '^(?=.*(?i)(美|🇺🇸|US|USA|JFK|SJC|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD))(?!.*(Plus|Australia|5x)).*$'
+  - name: 🇪🇺 欧洲自动
+    type: url-test
+    interval: 300
+    tolerance: 50
+    url: https://www.google.com/generate_204
+    include-all: true
+    filter: '^(?=.*(?i)(奥|比|保|克罗地亚|塞|捷|丹|爱沙|芬|法|德|希|匈|爱尔|意|拉|立|卢|荷|波|葡|罗|斯洛伐|斯洛文|西|瑞|英|🇧🇪|🇨🇿|🇩🇰|🇫🇮|🇫🇷|🇩🇪|🇮🇪|🇮🇹|🇱🇹|🇱🇺|🇳🇱|🇵🇱|🇸🇪|🇬🇧|CDG|FRA|AMS|MAD|BCN|FCO|MUC|BRU))(?!.*(排除1|排除2|5x)).*$'
+  - name: ♻️ 其他自动
+    type: url-test
+    interval: 300
+    tolerance: 50
+    url: https://www.google.com/generate_204
+    include-all: true
+    filter: '^(?!.*(DIRECT|直接连接|美|港|坡|台|新|日|韩|奥|比|保|克罗地亚|塞|捷|丹|爱沙|芬|法|德|希|匈|爱尔|意|拉|立|卢|荷|波|葡|罗|斯洛伐|斯洛文|西|瑞|英|🇭🇰|🇹🇼|🇸🇬|🇯🇵|🇰🇷|🇺🇸|🇬🇧|🇦🇹|🇧🇪|🇨🇿|🇩🇰|🇫🇮|🇫🇷|🇩🇪|🇮🇪|🇮🇹|🇱🇹|🇱🇺|🇳🇱|🇵🇱|🇸🇪|HK|TW|SG|JP|KR|US|GB|CDG|FRA|AMS|MAD|BCN|FCO|MUC|BRU|HKG|TPE|TSA|KHH|SIN|XSP|NRT|HND|KIX|CTS|FUK|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD|LHR|LGW)).*$'
+
+  # 🔄 均衡-散列组（load-balance）
+  - name: 🇭🇰 香港均衡-散列
+    type: load-balance
+    interval: 300
+    strategy: consistent-hashing
+    include-all: true
+    filter: '^(?=.*(?i)(港|🇭🇰|HK|Hong|HKG))(?!.*(排除1|排除2|5x)).*$'
+  - name: 🇹🇼 台湾均衡-散列
+    type: load-balance
+    interval: 300
+    strategy: consistent-hashing
+    include-all: true
+    filter: '^(?=.*(?i)(台|🇹🇼|TW|tai|TPE|TSA|KHH))(?!.*(排除1|排除2|5x)).*$'
+  - name: 🇸🇬 新加坡均衡-散列
+    type: load-balance
+    interval: 300
+    strategy: consistent-hashing
+    include-all: true
+    filter: '^(?=.*(?i)(坡|🇸🇬|SG|Sing|SIN|XSP))(?!.*(排除1|排除2|5x)).*$'
+  - name: 🇯🇵 日本均衡-散列
+    type: load-balance
+    interval: 300
+    strategy: consistent-hashing
+    include-all: true
+    filter: '^(?=.*(?i)(日|🇯🇵|JP|Japan|NRT|HND|KIX|CTS|FUK))(?!.*(尼日利亚|排除2|5x)).*$'
+  - name: 🇰🇷 韩国均衡-散列
+    type: load-balance
+    interval: 300
+    strategy: consistent-hashing
+    include-all: true
+    filter: '^(?=.*(?i)(韩|🇰🇷|KR|Korea|South))(?!.*(排除1|排除2|5x)).*$'
+  - name: 🇺🇸 美国均衡-散列
+    type: load-balance
+    interval: 300
+    strategy: consistent-hashing
+    include-all: true
+    filter: '^(?=.*(?i)(美|🇺🇸|US|USA|JFK|SJC|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD))(?!.*(Plus|Australia|5x)).*$'
+  - name: 🇪🇺 欧洲均衡-散列
+    type: load-balance
+    interval: 300
+    strategy: consistent-hashing
+    include-all: true
+    filter: '^(?=.*(?i)(奥|比|保|克罗地亚|塞|捷|丹|爱沙|芬|法|德|希|匈|爱尔|意|拉|立|卢|荷|波|葡|罗|斯洛伐|斯洛文|西|瑞|英|🇧🇪|🇨🇿|🇩🇰|🇫🇮|🇫🇷|🇩🇪|🇮🇪|🇮🇹|🇱🇹|🇱🇺|🇳🇱|🇵🇱|🇸🇪|🇬🇧|CDG|FRA|AMS|MAD|BCN|FCO|MUC|BRU))(?!.*(排除1|排除2|5x)).*$'
+  - name: ♻️ 其他均衡-散列
+    type: load-balance
+    interval: 300
+    strategy: consistent-hashing
+    include-all: true
+    filter: '^(?!.*(DIRECT|直接连接|美|港|坡|台|新|日|韩|奥|比|保|克罗地亚|塞|捷|丹|爱沙|芬|法|德|希|匈|爱尔|意|拉|立|卢|荷|波|葡|罗|斯洛伐|斯洛文|西|瑞|英|🇭🇰|🇹🇼|🇸🇬|🇯🇵|🇰🇷|🇺🇸|🇬🇧|🇦🇹|🇧🇪|🇨🇿|🇩🇰|🇫🇮|🇫🇷|🇩🇪|🇮🇪|🇮🇹|🇱🇹|🇱🇺|🇳🇱|🇵🇱|🇸🇪|HK|TW|SG|JP|KR|US|GB|CDG|FRA|AMS|MAD|BCN|FCO|MUC|BRU|HKG|TPE|TSA|KHH|SIN|XSP|NRT|HND|KIX|CTS|FUK|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD|LHR|LGW)).*$'
+
+  # ⏳ 均衡-轮询组
+  - name: 🇭🇰 香港均衡-轮询
+    type: load-balance
+    interval: 300
+    include-all: true
+    filter: '^(?=.*(?i)(港|🇭🇰|HK|Hong|HKG))(?!.*(排除1|排除2|5x)).*$'
+  - name: 🇹🇼 台湾均衡-轮询
+    type: load-balance
+    interval: 300
+    include-all: true
+    filter: '^(?=.*(?i)(台|🇹🇼|TW|tai|TPE|TSA|KHH))(?!.*(排除1|排除2|5x)).*$'
+  - name: 🇸🇬 新加坡均衡-轮询
+    type: load-balance
+    interval: 300
+    include-all: true
+    filter: '^(?=.*(?i)(坡|🇸🇬|SG|Sing|SIN|XSP))(?!.*(排除1|排除2|5x)).*$'
+  - name: 🇯🇵 日本均衡-轮询
+    type: load-balance
+    interval: 300
+    include-all: true
+    filter: '^(?=.*(?i)(日|🇯🇵|JP|Japan|NRT|HND|KIX|CTS|FUK))(?!.*(尼日利亚|排除2|5x)).*$'
+  - name: 🇰🇷 韩国均衡-轮询
+    type: load-balance
+    interval: 300
+    include-all: true
+    filter: '^(?=.*(?i)(韩|🇰🇷|KR|Korea|South))(?!.*(排除1|排除2|5x)).*$'
+  - name: 🇺🇸 美国均衡-轮询
+    type: load-balance
+    interval: 300
+    include-all: true
+    filter: '^(?=.*(?i)(美|🇺🇸|US|USA|JFK|SJC|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD))(?!.*(Plus|Australia|5x)).*$'
+  - name: 🇪🇺 欧洲均衡-轮询
+    type: load-balance
+    interval: 300
+    include-all: true
+    filter: '^(?=.*(?i)(奥|比|保|克罗地亚|塞|捷|丹|爱沙|芬|法|德|希|匈|爱尔|意|拉|立|卢|荷|波|葡|罗|斯洛伐|斯洛文|西|瑞|英|🇧🇪|🇨🇿|🇩🇰|🇫🇮|🇫🇷|🇩🇪|🇮🇪|🇮🇹|🇱🇹|🇱🇺|🇳🇱|🇵🇱|🇸🇪|🇬🇧|CDG|FRA|AMS|MAD|BCN|FCO|MUC|BRU))(?!.*(排除1|排除2|5x)).*$'
+  - name: ♻️ 其他均衡-轮询
+    type: load-balance
+    interval: 300
+    include-all: true
+    filter: '^(?!.*(DIRECT|直接连接|美|港|坡|台|新|日|韩|奥|比|保|克罗地亚|塞|捷|丹|爱沙|芬|法|德|希|匈|爱尔|意|拉|立|卢|荷|波|葡|罗|斯洛伐|斯洛文|西|瑞|英|🇭🇰|🇹🇼|🇸🇬|🇯🇵|🇰🇷|🇺🇸|🇬🇧|🇦🇹|🇧🇪|🇨🇿|🇩🇰|🇫🇮|🇫🇷|🇩🇪|🇮🇪|🇮🇹|🇱🇹|🇱🇺|🇳🇱|🇵🇱|🇸🇪|HK|TW|SG|JP|KR|US|GB|CDG|FRA|AMS|MAD|BCN|FCO|MUC|BRU|HKG|TPE|TSA|KHH|SIN|XSP|NRT|HND|KIX|CTS|FUK|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD|LHR|LGW)).*$'
+
+  # ✋ 手动选择组
+  - name: 🇭🇰 香港手动
+    type: select
+    include-all: true
+    filter: '^(?=.*(?i)(港|🇭🇰|HK|Hong|HKG))(?!.*(排除1|排除2|5x)).*$'
+  - name: 🇹🇼 台湾手动
+    type: select
+    include-all: true
+    filter: '^(?=.*(?i)(台|🇹🇼|TW|tai|TPE|TSA|KHH))(?!.*(排除1|排除2|5x)).*$'
+  - name: 🇸🇬 新加坡手动
+    type: select
+    include-all: true
+    filter: '^(?=.*(?i)(坡|🇸🇬|SG|Sing|SIN|XSP))(?!.*(排除1|排除2|5x)).*$'
+  - name: 🇯🇵 日本手动
+    type: select
+    include-all: true
+    filter: '^(?=.*(?i)(日|🇯🇵|JP|Japan|NRT|HND|KIX|CTS|FUK))(?!.*(尼日利亚|排除2|5x)).*$'
+  - name: 🇰🇷 韩国手动
+    type: select
+    include-all: true
+    filter: '^(?=.*(?i)(韩|🇰🇷|KR|Korea|South))(?!.*(排除1|排除2|5x)).*$'
+  - name: 🇺🇸 美国手动
+    type: select
+    include-all: true
+    filter: '^(?=.*(?i)(美|🇺🇸|US|USA|JFK|SJC|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD))(?!.*(Plus|Australia|5x)).*$'
+  - name: 🇪🇺 欧洲手动
+    type: select
+    include-all: true
+    filter: '^(?=.*(?i)(奥|比|保|克罗地亚|塞|捷|丹|爱沙|芬|法|德|希|匈|爱尔|意|拉|立|卢|荷|波|葡|罗|斯洛伐|斯洛文|西|瑞|英|🇧🇪|🇨🇿|🇩🇰|🇫🇮|🇫🇷|🇩🇪|🇮🇪|🇮🇹|🇱🇹|🇱🇺|🇳🇱|🇵🇱|🇸🇪|🇬🇧|CDG|FRA|AMS|MAD|BCN|FCO|MUC|BRU))(?!.*(排除1|排除2|5x)).*$'
+  - name: ♻️ 其他手动
+    type: select
+    include-all: true
+    filter: '^(?!.*(DIRECT|直接连接|群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入|USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author|美|港|坡|台|新|日|韩|奥|比|保|克罗地亚|塞|捷|丹|爱沙|芬|法|德|希|匈|爱尔|意|拉|立|卢|荷|波|葡|罗|斯洛伐|斯洛文|西|瑞|英|🇭🇰|🇹🇼|🇸🇬|🇯🇵|🇰🇷|🇺🇸|🇬🇧|🇦🇹|🇧🇪|🇨🇿|🇩🇰|🇫🇮|🇫🇷|🇩🇪|🇮🇪|🇮🇹|🇱🇹|🇱🇺|🇳🇱|🇵🇱|🇸🇪|HK|TW|SG|JP|KR|US|GB|CDG|FRA|AMS|MAD|BCN|FCO|MUC|BRU|HKG|TPE|TSA|KHH|SIN|XSP|NRT|HND|KIX|CTS|FUK|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD|LHR|LGW)).*$'
+
+rule-providers:
+  private:
+    type: http
+    behavior: classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/Lan/Lan_No_Resolve.yaml"
+    path: ./ruleset/private.yaml
+    interval: 86400
+
+  cn:
+    type: http
+    behavior: classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/China/China_Classical_No_Resolve.yaml"
+    path: ./ruleset/cn.yaml
+    interval: 86400
+
+  gfw:
+    type: http
+    behavior: classical
+    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/refs/heads/master/Clash/Providers/ProxyGFWlist.yaml"
+    path: ./ruleset/gfw.yaml
+    interval: 86400
+
+  github:
+    type: http
+    behavior: classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/GitHub/GitHub_No_Resolve.yaml"
+    path: ./ruleset/github.yaml
+    interval: 86400
+
+  telegram:
+    type: http
+    behavior: classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/Telegram/Telegram_No_Resolve.yaml"
+    path: ./ruleset/telegram.yaml
+    interval: 86400
+
+  twitter:
+    type: http
+    behavior: classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/Twitter/Twitter_No_Resolve.yaml"
+    path: ./ruleset/twitter.yaml
+    interval: 86400
+
+  youtube:
+    type: http
+    behavior: classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/YouTube/YouTube_No_Resolve.yaml"
+    path: ./ruleset/youtube.yaml
+    interval: 86400
+
+  microsoft:
+    type: http
+    behavior: classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/Microsoft/Microsoft_No_Resolve.yaml"
+    path: ./ruleset/microsoft.yaml
+    interval: 86400
+
+  google:
+    type: http
+    behavior: classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/Google/Google_No_Resolve.yaml"
+    path: ./ruleset/google.yaml
+    interval: 86400
+
+  openai:
+    type: http
+    behavior: classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/OpenAI/OpenAI_No_Resolve.yaml"
+    path: ./ruleset/openai.yaml
+    interval: 86400
+
+  duckduckgo:
+    type: http
+    behavior: classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Duckduckgo/Duckduckgo.yaml"
+    path: ./ruleset/duckduckgo.yaml
+    interval: 86400
+
+  zhilian1:
+    type: http
+    behavior: classical
+    format: text
+    url: "https://raw.githubusercontent.com/anzcoffeetime/clash/refs/heads/main/zhilian.yaml"
+    path: ./ruleset/zhilian.yaml
+    interval: 86400
+
+
+rules:
+  # === 本地/直连规则（最高优先级）===
+  - RULE-SET,private,DIRECT,no-resolve
+  - RULE-SET,cn,DIRECT,no-resolve
+  - RULE-SET,zhilian1,DIRECT,no-resolve
+  - GEOIP,CN,DIRECT,no-resolve
+
+  # === 特定服务规则（按重要程度排序）===
+  - RULE-SET,openai,🤖 ChatGPT,no-resolve
+  - RULE-SET,google,🍀 Google,no-resolve
+  - RULE-SET,youtube,📹 YouTube,no-resolve
+  - RULE-SET,twitter,📲 Twitter,no-resolve
+  - RULE-SET,telegram,📲 Telegram,no-resolve
+  - RULE-SET,github,👨🏿‍💻 GitHub,no-resolve
+  - RULE-SET,microsoft,Ⓜ️ 微软服务,no-resolve
+  - RULE-SET,duckduckgo,🌍 Duckduckgo,no-resolve
+
+  # === 通用代理规则（兜底代理）===
+  - RULE-SET,gfw,🚀 默认代理
+
+  # === 最终兜底 ===
+  - MATCH,🐟 漏网之鱼,no-resolve
